@@ -1,7 +1,7 @@
 # Проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Наумов](https://up.htmlacademy.ru/ecmascript/13/user/57563).
-* Наставник: `Неизвестно`.
+* Наставник:  [Екатерина Малецкая](https://up.htmlacademy.ru/ecmascript/13/user/902197).
 
 ---
 
