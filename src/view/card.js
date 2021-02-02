@@ -1,8 +1,7 @@
 import AbstractView from "./abstract.js";
 import {humanizeReleaseDate} from "../utils/common.js";
+import {DESCRIPTION_TEXT_LENGTH} from "../utils/const.js";
 import moment from "moment";
-
-const DESCRIPTION_TEXT_LENGTH = 140;
 
 const createFilmCardTemplate = (film) => {
   const {poster, title, rating, date, duration, genres, description, comments, watchlist, history, favorites, id} = film;
@@ -51,18 +50,6 @@ export default class FilmCard extends AbstractView {
     this._callback.watchlistClick();
   }
 
-  _watchedClickHandler(evt) {
-    evt.preventDefault();
-    evt.target.classList.toggle(`film-card__controls-item--active`);
-    this._callback.watchedClick();
-  }
-
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    evt.target.classList.toggle(`film-card__controls-item--active`);
-    this._callback.favoriteClick();
-  }
-
   setWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
     this.getElement()
@@ -103,5 +90,17 @@ export default class FilmCard extends AbstractView {
       .querySelector(`.film-card__controls-item--favorite`)
       .removeEventListener(`click`, this._favoriteClickHandler);
     this._callback.favoriteClick = null;
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    evt.target.classList.toggle(`film-card__controls-item--active`);
+    this._callback.watchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    evt.target.classList.toggle(`film-card__controls-item--active`);
+    this._callback.favoriteClick();
   }
 }
