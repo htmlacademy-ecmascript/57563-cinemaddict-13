@@ -26,12 +26,12 @@ export default class Popup {
     this._body = document.querySelector(`body`);
     this._footer = document.querySelector(`.footer`);
 
-    this._handleRemovePopup = this._handleRemovePopup.bind(this);
+    this._removePopupHandler = this._removePopupHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
 
-    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
-    this._handleWatchedClick = this._handleWatchedClick.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
 
     this._handleViewAction = this._handleViewAction.bind(this);
   }
@@ -82,30 +82,30 @@ export default class Popup {
     }
   }
 
-  _handleRemovePopup() {
+  _removePopupHandler() {
     this.removePopup();
   }
 
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      this._handleRemovePopup();
+      this._removePopupHandler();
     }
   }
 
   _setPopupHandlers() {
-    this._popupComponent.setMouseDownHandler(this._handleRemovePopup);
+    this._popupComponent.setMouseDownHandler(this._removePopupHandler);
     document.addEventListener(`keydown`, this._escKeyDownHandler);
-    this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._popupComponent.setWatchlistClickHandler(this._watchlistClickHandler);
+    this._popupComponent.setWatchedClickHandler(this._watchedClickHandler);
+    this._popupComponent.setFavoriteClickHandler(this._favoriteClickHandler);
   }
 
   _removePopupHandlers() {
-    this._popupComponent.removeMouseDownHandler(this._handleRemovePopup);
+    this._popupComponent.removeMouseDownHandler(this._removePopupHandler);
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
-    this._popupComponent.removeWatchlistClickHandler(this._handleWatchlistClick);
-    this._popupComponent.removeWatchedClickHandler(this._handleWatchedClick);
-    this._popupComponent.removeFavoriteClickHandler(this._handleFavoriteClick);
+    this._popupComponent.removeWatchlistClickHandler(this._watchlistClickHandler);
+    this._popupComponent.removeWatchedClickHandler(this._watchedClickHandler);
+    this._popupComponent.removeFavoriteClickHandler(this._favoriteClickHandler);
   }
 
   _renderComments() {
@@ -150,7 +150,7 @@ export default class Popup {
     }
   }
 
-  _handleWatchlistClick() {
+  _watchlistClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
@@ -164,7 +164,7 @@ export default class Popup {
     );
   }
 
-  _handleWatchedClick() {
+  _watchedClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
@@ -179,7 +179,7 @@ export default class Popup {
     );
   }
 
-  _handleFavoriteClick() {
+  _favoriteClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
