@@ -4,7 +4,7 @@ import {createElement} from "../utils/render.js";
 import moment from "moment";
 
 const createGenreTemplate = (genres) => {
-  let genreList = [];
+  const genreList = [];
   for (const genre of genres) {
     genreList.push(`<span class="film-details__genre">${genre}</span>`);
   }
