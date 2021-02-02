@@ -1,6 +1,6 @@
+import AbstractView from "./abstract.js";
 import {UserRating} from "../utils/const.js";
 import {getRank} from "../utils/common.js";
-import AbstractView from "./abstract.js";
 
 const createProfileRatingTemplate = (rating) => {
   return (

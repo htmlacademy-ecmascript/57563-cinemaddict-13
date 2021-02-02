@@ -25,7 +25,7 @@ export const createFilterMenuTemplate = (filterItems, currentFilterType) => {
   );
 };
 
-export default class FilterMenu extends AbstractView {
+export default class Filter extends AbstractView {
   constructor(filters, currentFilterType) {
     super();
     this._filters = filters;

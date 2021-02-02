@@ -28,7 +28,7 @@ const createSectionFilmsTemplate = () => {
   );
 };
 
-export default class SectionFilms extends AbstractView {
+export default class Films extends AbstractView {
   constructor() {
     super();
 

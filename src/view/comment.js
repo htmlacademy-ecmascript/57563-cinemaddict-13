@@ -31,32 +31,18 @@ export default class Comment extends SmartView {
   constructor(comment) {
     super();
     this._comment = comment;
-    this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
   }
 
   getTemplate() {
     return createCommentTemplate(this._comment);
   }
 
-  _handleDeleteClick(evt) {
-    evt.preventDefault();
-    evt.stopPropagation();
-    this.getElement()
-      .querySelector(`.film-details__comment-delete`)
-      .removeEventListener(`click`, this._handleDeleteClick);
-
-    const deleteButton = this.getElement().querySelector(`.film-details__comment-delete`);
-
-    deleteButton.disabled = true;
-    deleteButton.textContent = `Deleting…`;
-    this._callback.deleteClick(UserAction.DELETE_COMMENT, UpdateType.MINOR, this._comment);
-  }
-
   setDeleteHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement()
       .querySelector(`.film-details__comment-delete`)
-      .addEventListener(`click`, this._handleDeleteClick);
+      .addEventListener(`click`, this._deleteClickHandler);
   }
 
   showProblem() {
@@ -66,7 +52,7 @@ export default class Comment extends SmartView {
 
     this.getElement()
       .querySelector(`.film-details__comment-delete`)
-      .removeEventListener(`click`, this._handleDeleteClick);
+      .removeEventListener(`click`, this._deleteClickHandler);
     element.classList.add(`shake`);
 
     setTimeout(() => {
@@ -74,9 +60,24 @@ export default class Comment extends SmartView {
       deleteButton.disabled = false;
       this.getElement()
         .querySelector(`.film-details__comment-delete`)
-        .addEventListener(`click`, this._handleDeleteClick);
+        .addEventListener(`click`, this._deleteClickHandler);
       deleteButton.textContent = `Delete`;
     }, 700);
+  }
+
+  _deleteClickHandler(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    this.getElement()
+      .querySelector(`.film-details__comment-delete`)
+      .removeEventListener(`click`, this._deleteClickHandler);
+
+    const deleteButton = this.getElement()
+      .querySelector(`.film-details__comment-delete`);
+
+    deleteButton.disabled = true;
+    deleteButton.textContent = `Deleting…`;
+    this._callback.deleteClick(UserAction.DELETE_COMMENT, UpdateType.MINOR, this._comment);
   }
 }
 

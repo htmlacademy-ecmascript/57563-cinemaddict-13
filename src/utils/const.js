@@ -1,5 +1,7 @@
+export const BAR_HEIGHT = 50;
 export const FILM_CARD_COUNT = 5;
 export const FILM_EXTRA_CARD_COUNT = 2;
+export const DESCRIPTION_TEXT_LENGTH = 140;
 export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 export const AUTHORIZATION = `Basic jS7av3dnVwze1sa5p`;
 

@@ -13,11 +13,11 @@ export default class Filter {
 
     this._filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
 
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._modelEventHandler);
+    this._filterModel.addObserver(this._modelEventHandler);
   }
 
   init() {
@@ -27,7 +27,7 @@ export default class Filter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setFilterTypeChangeHandler(this._filterTypeChangeHandler);
     this._filterComponent.setStatsButtonClickHandler(this._callbackForStats);
 
     if (prevFilterComponent === null) {
@@ -39,11 +39,11 @@ export default class Filter {
     remove(prevFilterComponent);
   }
 
-  _handleModelEvent() {
+  _modelEventHandler() {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
+  _filterTypeChangeHandler(filterType) {
     if (this._currentFilter === filterType) {
       return;
     }

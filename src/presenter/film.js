@@ -10,9 +10,9 @@ export default class Film {
 
     this._filmCardComponent = null;
 
-    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
-    this._handleWatchedClick = this._handleWatchedClick.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   init(film) {
@@ -38,7 +38,7 @@ export default class Film {
     remove(this._filmCardComponent);
   }
 
-  _handleWatchlistClick() {
+  _watchlistClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
@@ -52,7 +52,7 @@ export default class Film {
     );
   }
 
-  _handleWatchedClick() {
+  _watchedClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
@@ -67,7 +67,7 @@ export default class Film {
     );
   }
 
-  _handleFavoriteClick() {
+  _favoriteClickHandler() {
     this._changeData(
         UserAction.UPDATE_FILM,
         this._currentUpdateType,
@@ -82,14 +82,14 @@ export default class Film {
   }
 
   _setCardHandlers() {
-    this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmCardComponent.setWatchlistClickHandler(this._watchlistClickHandler);
+    this._filmCardComponent.setWatchedClickHandler(this._watchedClickHandler);
+    this._filmCardComponent.setFavoriteClickHandler(this._favoriteClickHandler);
   }
 
   _removeCardHandlers() {
-    this._filmCardComponent.removeWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmCardComponent.removeWatchedClickHandler(this._handleWatchedClick);
-    this._filmCardComponent.removeFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmCardComponent.removeWatchlistClickHandler(this._watchlistClickHandler);
+    this._filmCardComponent.removeWatchedClickHandler(this._watchedClickHandler);
+    this._filmCardComponent.removeFavoriteClickHandler(this._favoriteClickHandler);
   }
 }

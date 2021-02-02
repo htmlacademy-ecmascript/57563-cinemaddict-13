@@ -1,14 +1,14 @@
 import FooterStatisticsView from "./view/footer-statistics.js";
 import StatisticsView from "./view/statistics.js";
 import FilterPresenter from "./presenter/filter.js";
-import MovieListPresenter from "./presenter/films-list.js";
-import {render, remove, RenderPosition} from "./utils/render.js";
-import {END_POINT, AUTHORIZATION, MenuItem} from "./utils/const.js";
+import FilmsListPresenter from "./presenter/films-list.js";
 import FilmsModel from "./model/films.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api/api.js";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
+import {render, remove, RenderPosition} from "./utils/render.js";
+import {END_POINT, AUTHORIZATION, MenuItem} from "./utils/const.js";
 
 const STORE_PREFIX = `cinemaddict-localstorage`;
 const STORE_COMMENTS_PREFIX = `cinemaddict-localstorage-comments`;
@@ -25,10 +25,11 @@ const filmsModel = new FilmsModel();
 const filterModel = new FilterModel();
 
 let firstLoad = true;
+let filmsLocal = [];
 
 let userStatisticsComponent = null;
 let filterPresenter = null;
-let movieListPresenter = null;
+let filmListPresenter = null;
 
 
 const siteHeaderElement = document.querySelector(`.header`);
@@ -48,9 +49,9 @@ const handleStatsButtonClick = (menuItem) => {
 
   switch (menuItem) {
     case MenuItem.CHANGE_FILTER:
-      movieListPresenter.destroy();
+      filmListPresenter.destroy();
 
-      movieListPresenter = new MovieListPresenter(
+      filmListPresenter = new FilmsListPresenter(
           apiWithProvider,
           siteHeaderElement,
           siteMainElement,
@@ -62,11 +63,11 @@ const handleStatsButtonClick = (menuItem) => {
       );
 
       filterPresenter.init();
-      movieListPresenter.init();
+      filmListPresenter.init();
       remove(userStatisticsComponent);
       break;
     case MenuItem.STATS:
-      movieListPresenter.destroy();
+      filmListPresenter.destroy();
       filterPresenter.init();
       userStatisticsComponent = new StatisticsView(filmsModel);
       render(siteMainElement, userStatisticsComponent, RenderPosition.BEFOREEND);
@@ -84,7 +85,7 @@ filterPresenter = new FilterPresenter(
     filmsModel,
     handleStatsButtonClick
 );
-movieListPresenter = new MovieListPresenter(
+filmListPresenter = new FilmsListPresenter(
     apiWithProvider,
     siteHeaderElement,
     siteMainElement,
@@ -96,22 +97,20 @@ movieListPresenter = new MovieListPresenter(
 );
 
 filterPresenter.init();
-movieListPresenter.init();
-
-let moviesLocal = [];
+filmListPresenter.init();
 
 apiWithProvider.getMovies()
-  .then((movies) => {
-    moviesLocal = movies;
+  .then((film) => {
+    filmsLocal = film;
 
-    return movies;
+    return film;
   })
   .then(() => {
     const commentsLocal = {};
 
-    const moviesLocalForStore = moviesLocal.slice().map(FilmsModel.adaptToServer);
+    const filmsLocalForStore = filmsLocal.slice().map(FilmsModel.adaptToServer);
 
-    moviesLocalForStore.map((film) => {
+    filmsLocalForStore.map((film) => {
       apiWithProvider.getComments(film.id).then((comments) => {
         commentsLocal[film.id] = comments;
         return commentsLocal;
@@ -120,25 +119,22 @@ apiWithProvider.getMovies()
       });
     });
 
-    filmsStore.setItems(moviesLocalForStore);
-    filmsModel.setFilms(moviesLocal);
-    render(siteFooterStatisticsElement, new FooterStatisticsView(moviesLocal), RenderPosition.BEFOREEND);
+    filmsStore.setItems(filmsLocalForStore);
+    filmsModel.setFilms(filmsLocal);
+    render(siteFooterStatisticsElement, new FooterStatisticsView(filmsLocal), RenderPosition.BEFOREEND);
   })
   .then(() => {
     filterPresenter.init();
-    movieListPresenter.init();
-    movieListPresenter.removeLoadingFilms();
+    filmListPresenter.init();
+    filmListPresenter.removeLoadingFilms();
   })
   .catch(() => {
     filmsModel.setFilms([]);
 
     filterPresenter.init();
-    movieListPresenter.init();
-    movieListPresenter.removeLoadingFilms();
+    filmListPresenter.init();
+    filmListPresenter.removeLoadingFilms();
   });
-
-
-//  =========================================================
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`./sw.js`)

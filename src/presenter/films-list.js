@@ -20,7 +20,7 @@ import {
 } from "../utils/const.js";
 
 
-export default class MovieList {
+export default class FilmList {
   constructor(
       api,
       headContainer,
@@ -37,10 +37,12 @@ export default class MovieList {
     this._commentsStore = commentsStore;
     this._container = mainContainer;
     this._firstLoad = firstLoad;
+
     this._renderedFilmCount = FILM_CARD_COUNT;
     this._mainFilmPresenters = {};
     this._topFilmPresenters = {};
     this._commentedFilmPresenters = {};
+
     this._isPopupOpen = false;
     this._currentFilmPopup = null;
 
@@ -48,6 +50,7 @@ export default class MovieList {
     this._noDataComponent = null;
     this._sortMenuComponent = null;
     this._filmPopupComponent = null;
+
     this._sectionFilmsComponent = new SectionFilmsView();
     this._profileRatingComponent = new ProfileRatingView();
     this._loadingFilmsComponent = new LoadingFilmsView();
@@ -55,25 +58,25 @@ export default class MovieList {
     this._head = document.querySelector(`header`);
     this._body = document.querySelector(`body`);
 
-    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
+    this._loadMoreButtonClickHandler = this._loadMoreButtonClickHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
-    this._handleCardFilmClick = this._handleCardFilmClick.bind(this);
-    this._handleFilmUpdate = this._handleFilmUpdate.bind(this);
-    this._handleSetPopupFlag = this._handleSetPopupFlag.bind(this);
-    this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._cardFilmClickHandler = this._cardFilmClickHandler.bind(this);
+    this._filmUpdateHandler = this._filmUpdateHandler.bind(this);
+    this._setPopupFlagHandler = this._setPopupFlagHandler.bind(this);
+    this._viewActionHandler = this._viewActionHandler.bind(this);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
   }
 
   init() {
     this._activeFilterFilms = FilterType.ALL;
     this._currentSortType = SortType.DEFAULT;
 
-    this._sectionFilmsComponent.setCardClickHandler(this._handleCardFilmClick);
+    this._sectionFilmsComponent.setCardClickHandler(this._cardFilmClickHandler);
 
     this._renderProfileRating();
 
-    this._filmsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._modelEventHandler);
+    this._filterModel.addObserver(this._modelEventHandler);
 
     this._renderMain();
   }
@@ -92,7 +95,7 @@ export default class MovieList {
     }
 
     this._clearFilmsList(true, true);
-    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filmsModel.removeObserver(this._modelEventHandler);
   }
 
   closePopup() {
@@ -122,7 +125,11 @@ export default class MovieList {
     return filteredFilms;
   }
 
-  _handleFilmUpdate(updatedFilm) {
+  _setPopupFlagHandler(value) {
+    this._isPopupOpen = value;
+  }
+
+  _filmUpdateHandler(updatedFilm) {
     if (this._mainFilmPresenters[updatedFilm.id]) {
       this._mainFilmPresenters[updatedFilm.id].init(updatedFilm);
     }
@@ -136,7 +143,7 @@ export default class MovieList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _viewActionHandler(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovies(update)
@@ -153,13 +160,13 @@ export default class MovieList {
     }
   }
 
-  _handleModelEvent(updateType, data) {
+  _modelEventHandler(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._handleFilmUpdate(data);
+        this._filmUpdateHandler(data);
         break;
       case UpdateType.MINOR:
-        this._handleFilmUpdate(data);
+        this._filmUpdateHandler(data);
         this._clearFilmsList();
         this._renderMain();
         break;
@@ -170,17 +177,13 @@ export default class MovieList {
     }
   }
 
-  _handleSetPopupFlag(value) {
-    this._isPopupOpen = value;
-  }
-
   _renderPopupFilm(currentFilm) {
     this.closePopup();
 
     this._filmPopupComponent = new PopupPresenter(
         this._api,
-        this._handleViewAction,
-        this._handleSetPopupFlag,
+        this._viewActionHandler,
+        this._setPopupFlagHandler,
         this._commentsStore,
         this._activeFilterFilms
     );
@@ -197,7 +200,7 @@ export default class MovieList {
     return this._currentFilmPopup;
   }
 
-  _handleCardFilmClick(evt) {
+  _cardFilmClickHandler(evt) {
     if (
       evt.target.classList.contains(`film-card__poster`) ||
       evt.target.classList.contains(`film-card__title`) ||
@@ -209,7 +212,7 @@ export default class MovieList {
     }
   }
 
-  _handleLoadMoreButtonClick() {
+  _loadMoreButtonClickHandler() {
 
     const mainFilmContainer = this._sectionFilmsComponent
       .getElement()
@@ -265,7 +268,7 @@ export default class MovieList {
 
     render(siteFilmListElement, this._loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
-    this._loadMoreButtonComponent.setClickHandler(this._handleLoadMoreButtonClick);
+    this._loadMoreButtonComponent.setClickHandler(this._loadMoreButtonClickHandler);
   }
 
   _renderProfileRating() {
@@ -316,7 +319,7 @@ export default class MovieList {
       .slice(from, to)
       .forEach((film) => {
         const filmPresenter = new FilmPresenter(
-            this._handleViewAction,
+            this._viewActionHandler,
             this._activeFilterFilms
         );
 
@@ -397,7 +400,7 @@ export default class MovieList {
       this._container.querySelector(`.films`).remove();
     }
 
-    this._sectionFilmsComponent.removeCardClickHandler(this._handleCardFilmClick);
+    this._sectionFilmsComponent.removeCardClickHandler(this._cardFilmClickHandler);
   }
 
   _createTopCardFilms() {
@@ -459,6 +462,6 @@ export default class MovieList {
     this._createTopCardFilms();
     this._createCommentedCardFilms();
 
-    this._sectionFilmsComponent.setCardClickHandler(this._handleCardFilmClick);
+    this._sectionFilmsComponent.setCardClickHandler(this._cardFilmClickHandler);
   }
 }
