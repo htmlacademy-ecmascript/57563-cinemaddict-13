@@ -125,6 +125,10 @@ export default class FilmList {
     return filteredFilms;
   }
 
+  _setPopupFlagHandler(value) {
+    this._isPopupOpen = value;
+  }
+
   _filmUpdateHandler(updatedFilm) {
     if (this._mainFilmPresenters[updatedFilm.id]) {
       this._mainFilmPresenters[updatedFilm.id].init(updatedFilm);
@@ -171,10 +175,6 @@ export default class FilmList {
         this._renderMain();
         break;
     }
-  }
-
-  _setPopupFlagHandler(value) {
-    this._isPopupOpen = value;
   }
 
   _renderPopupFilm(currentFilm) {

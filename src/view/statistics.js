@@ -160,7 +160,7 @@ const createUserStatisticsPageTemplate = (totalFilms, totalDuration, topGenre) =
   </section>`;
 };
 
-export default class UserStatistics extends Abstract {
+export default class Statistics extends Abstract {
   constructor(filmsModel) {
     super();
     this.filmsModel = filmsModel;

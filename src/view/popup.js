@@ -4,14 +4,14 @@ import {createElement} from "../utils/render.js";
 import moment from "moment";
 
 const createGenreTemplate = (genres) => {
-  const genreList = [];
+  const listGenres = [];
 
   for (const genre of genres) {
-    genreList.push(`<span class="film-details__genre">${genre}</span>`);
+    listGenres.push(`<span class="film-details__genre">${genre}</span>`);
   }
 
-  return `<td class="film-details__term">${genreList.length === 1 ? `Genre` : `Genres`}</td>
-            <td class="film-details__cell">${genreList.join(``)}</td>`;
+  return `<td class="film-details__term">${listGenres.length === 1 ? `Genre` : `Genres`}</td>
+            <td class="film-details__cell">${listGenres.join(``)}</td>`;
 };
 
 const createPopupTemplate = (data) => {
