@@ -39,7 +39,7 @@ export default class Popup {
   init(film) {
     this._film = film;
 
-    this._currentUpdateType = this._activeFilter === FilterType.ALL ? UpdateType.PATCH : UpdateType.MAJOR;
+    this._currentUpdateType = this._activeFilter === FilterType.ALL ? UpdateType.PATCH : UpdateType.MINOR;
 
     this.removePopup();
 
