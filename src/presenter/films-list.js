@@ -384,9 +384,9 @@ export default class FilmList {
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FILM_CARD_COUNT;
-    } else {
-      this._renderedFilmCount = Math.min(filmCount, this._renderedFilmCount);
     }
+
+    this._renderedFilmCount = filmCount < FILM_CARD_COUNT ? FILM_CARD_COUNT : Math.min(filmCount, this._renderedFilmCount);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
